@@ -1,0 +1,34 @@
+plugins {
+  id 'java'
+  id("com.diffplug.spotless") version "8.4.0"
+}
+
+repositories {
+  mavenCentral()
+}
+
+spotless {
+  format 'misc', {
+    // define the files to apply `misc` to
+    target '*.gradle', '.gitattributes', '.gitignore'
+
+    // define the steps to apply to those files
+    trimTrailingWhitespace()
+    leadingTabsToSpaces(2)
+    endWithNewline()
+  }
+  java {
+    // don't need to set target, it is inferred from java
+
+    // apply a specific flavor of google-java-format
+    googleJavaFormat('1.35.0').reflowLongStrings().skipJavadocFormatting()
+    // fix formatting of type annotations
+    formatAnnotations()
+    // make sure every file has the following copyright header.
+    // optionally, Spotless can set copyright years by digging
+    // through git history (see "license" section below)
+    licenseHeader '/* (C) Arnaud \'red\' Rouyer $YEAR */'
+  }
+}
+
+apply from: "${System.env.GHIDRA_INSTALL_DIR}/support/buildExtension.gradle"
